@@ -1,16 +1,28 @@
 'use strict';
 
-let React = require('react-native');
-let {
+const React = require('react-native');
+const {
   Animated,
   ScrollView,
   StyleSheet,
   View,
 } = React;
 
-let ExHeader = require('./ExHeader');
+const ExHeader = require('./ExHeader');
 
 const STATUS_BAR_HEIGHT = 20;
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    paddingTop: 0,
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+});
 
 class ExScreen extends React.Component {
   constructor(props, context) {
@@ -21,8 +33,17 @@ class ExScreen extends React.Component {
     };
   }
 
+  _handleScroll(event) {
+    const {
+      contentInset: { top: topInset },
+      contentOffset: { y: scrollY },
+    } = event.nativeEvent;
+    const scrollDistance = scrollY + topInset;
+    this.state.scrollDistance.setValue(scrollDistance);
+  }
+
   render() {
-    let {
+    const {
       title,
       headerColor,
       scrollEnabled,
@@ -37,7 +58,8 @@ class ExScreen extends React.Component {
           scrollEnabled={scrollEnabled}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
-          onScroll={this._handleScroll.bind(this)}>
+          onScroll={this._handleScroll.bind(this)}
+        >
           <View style={{ height: ExHeader.HEIGHT + STATUS_BAR_HEIGHT }} />
           {props.children}
         </ScrollView>
@@ -49,27 +71,6 @@ class ExScreen extends React.Component {
       </View>
     );
   }
-
-  _handleScroll(event) {
-    let {
-      contentInset: { top: topInset },
-      contentOffset: { y: scrollY },
-    } = event.nativeEvent;
-    let scrollDistance = scrollY + topInset;
-    this.state.scrollDistance.setValue(scrollDistance);
-  }
 }
-
-let styles = StyleSheet.create({
-  contentContainer: {
-    paddingTop: 0,
-  },
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-  },
-});
 
 module.exports = ExScreen;

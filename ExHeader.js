@@ -1,26 +1,45 @@
 'use strict';
 
-let React = require('react-native');
-let {
+const React = require('react-native');
+const {
   Animated,
   Easing,
   StyleSheet,
   View,
 } = React;
 
-let BODY_HEIGHT = 44;
-let TITLE_MARGIN_TOP = 12;
-let STATUS_BAR_HEIGHT = 20;
+const BODY_HEIGHT = 44;
+const TITLE_MARGIN_TOP = 12;
+const STATUS_BAR_HEIGHT = 20;
+
+const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+  },
+  statusBarStrut: {
+    height: STATUS_BAR_HEIGHT,
+  },
+  body: {
+    height: BODY_HEIGHT,
+  },
+  titleText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginTop: TITLE_MARGIN_TOP,
+    alignSelf: 'center',
+  },
+});
 
 class ExHeader extends React.Component {
   render() {
-    let {
+    const {
       title,
       scrollDistance,
       ...props,
     } = this.props;
 
-    let bodyStyle = {
+    const bodyStyle = {
       opacity: scrollDistance.interpolate({
         inputRange: [0, BODY_HEIGHT],
         outputRange: [1, 0],
@@ -34,7 +53,7 @@ class ExHeader extends React.Component {
       }),
     };
 
-    let titleStyle = {
+    const titleStyle = {
       transform: [{
         scale: scrollDistance.interpolate({
           inputRange: [0, BODY_HEIGHT],
@@ -63,24 +82,5 @@ class ExHeader extends React.Component {
 }
 
 ExHeader.HEIGHT = BODY_HEIGHT;
-
-let styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-  },
-  statusBarStrut: {
-    height: STATUS_BAR_HEIGHT,
-  },
-  body: {
-    height: BODY_HEIGHT,
-  },
-  titleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginTop: TITLE_MARGIN_TOP,
-    alignSelf: 'center',
-  },
-});
 
 module.exports = ExHeader;

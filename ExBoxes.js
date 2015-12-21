@@ -1,25 +1,44 @@
 'use strict';
 
-let React = require('react-native');
-let {
+const React = require('react-native');
+const {
   Animated,
-  Image,
   PanResponder,
   StyleSheet,
   View,
 } = React;
 
-let BOX_LENGTH = 88;
-let BOX_SPACING = 12;
-let PAN_THRESHOLD = 10;
-let PAN_STIFFNESS = 1.2;
+const BOX_LENGTH = 88;
+const BOX_SPACING = 12;
+const PAN_THRESHOLD = 10;
+const PAN_STIFFNESS = 1.2;
+
+function distance(x, y) {
+  return Math.sqrt(x * x + y * y);
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: BOX_LENGTH * 3 + BOX_SPACING * 2,
+    height: BOX_LENGTH * 3 + BOX_SPACING * 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  box: {
+    width: BOX_LENGTH,
+    height: BOX_LENGTH,
+    marginBottom: BOX_SPACING,
+  },
+});
 
 class ExBoxes extends React.Component {
   render() {
-    let { colors, ...props } = this.props;
+    const { colors, ...props } = this.props;
+
     return (
       <View {...props} style={[styles.container, props.style]}>
-        {this.props.colors.map(color =>
+        {colors.map(color =>
           <Box
             key={color}
             color={color}
@@ -51,7 +70,7 @@ class Box extends React.Component {
     };
   }
 
-  _handlePanGrant(event, gestureState) {
+  _handlePanGrant() {
     Animated.spring(this.state.scale, {
       toValue: 0.95,
       tension: 300,
@@ -65,7 +84,7 @@ class Box extends React.Component {
   }
 
   _handlePanMove(event, gestureState) {
-    let { dx, dy } = gestureState;
+    const { dx, dy } = gestureState;
     if (!this.state.isPanning) {
       if (distance(dx, dy) <= PAN_THRESHOLD) {
         return;
@@ -82,14 +101,14 @@ class Box extends React.Component {
     });
   }
 
-  _handlePanRelease(event, gestureState) {
+  _handlePanRelease() {
     if (!this.state.isPanning && this.props.onSelect) {
       this.props.onSelect();
     }
     this._restore();
   }
 
-  _handlePanTerminate(event, gestureState) {
+  _handlePanTerminate() {
     this._restore();
   }
 
@@ -129,31 +148,12 @@ class Box extends React.Component {
             transform: [
               { scale: this.state.scale },
               ...this.state.position.getTranslateTransform(),
-            ]
+            ],
           },
         ]}
       />
     );
   }
 }
-
-function distance(x, y) {
-  return Math.sqrt(x * x + y * y);
-}
-
-let styles = StyleSheet.create({
-  container: {
-    width: BOX_LENGTH * 3 + BOX_SPACING * 2,
-    height: BOX_LENGTH * 3 + BOX_SPACING * 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-  },
-  box: {
-    width: BOX_LENGTH,
-    height: BOX_LENGTH,
-    marginBottom: BOX_SPACING,
-  },
-});
 
 module.exports = ExBoxes;
