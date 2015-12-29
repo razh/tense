@@ -12,12 +12,16 @@ const {
   StatusBarIOS,
   StyleSheet,
   Text,
+  TextInput,
   View,
+  YellowBox,
 } = React;
 
+const fontFamilies = require('./font-families');
 const ExBoxes = require('./ExBoxes');
 const ExPhotoGallery = require('./ExPhotoGallery');
 const ExScreen = require('./ExScreen');
+const SimpleMarkdownTextInput = require('./SimpleMarkdownTextInput');
 
 const HORIZ_SPACE = 12;
 
@@ -45,6 +49,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 8,
     paddingHorizontal: HORIZ_SPACE,
+  },
+  card: {
+    backgroundColor: '#222',
+    borderWidth: 0,
+    margin: HORIZ_SPACE,
+    marginBottom: 2 * HORIZ_SPACE,
+    padding: HORIZ_SPACE,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    borderRadius: 4,
+  },
+  cardText: {
+    backgroundColor: 'transparent',
+    color: '#fff',
+    fontFamily: 'Avenir Next',
+    fontSize: 16,
   },
   note: {
     color: '#333',
@@ -82,6 +107,11 @@ const styles = StyleSheet.create({
   },
 });
 
+const fontStyles = StyleSheet.create(fontFamilies.reduce((object, fontFamily) => {
+  object[fontFamily] = { fontFamily };
+  return object;
+}, {}));
+
 class FirstExperience extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -115,6 +145,33 @@ class FirstExperience extends React.Component {
         scrollEnabled={!this.state.isBoxPressed}
         style={styles.container}
       >
+
+        <View style={styles.card}>
+          <Text style={styles.cardText}>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Similique neque, ipsam ipsa temporibus, fuga magni at cumque
+            voluptate dolor reiciendis ea, unde nesciunt quod optio possimus
+            nihil ducimus debitis harum?
+          </Text>
+        </View>
+
+        <SimpleMarkdownTextInput style={styles.cardText} />
+
+        {Object.keys(fontStyles).map(style =>
+          <View>
+            <Text style={[styles.text, fontStyles[style]]}>
+              {style}
+            </Text>
+
+            <Text style={[styles.text, fontStyles[style]]}>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Similique neque, ipsam ipsa temporibus, fuga magni at cumque
+              voluptate dolor reiciendis ea, unde nesciunt quod optio possimus
+              nihil ducimus debitis harum?
+            </Text>
+          </View>
+        )}
+
         {/* Try editing this text and reloading your project in Exponent */}
         <Text style={styles.paragraph}>
           This is a simple example of what you can make with Exponent. Feel
@@ -150,6 +207,8 @@ class FirstExperience extends React.Component {
         <Text style={styles.attribution}>
           Made for <Text style={styles.exponent}>EXPONENT</Text>
         </Text>
+
+        {YellowBox}
       </ExScreen>
     );
   }

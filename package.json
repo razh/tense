@@ -5,6 +5,9 @@
   "main": "main.js",
   "author": null,
   "dependencies": {
+    "mdast": "^2.3.0",
+    "react-native": "exponentjs/react-native#2015-11-13",
+    "simple-markdown": "0.0.7"
   },
   "devDependencies": {
     "eslint": "^1.10.3",
